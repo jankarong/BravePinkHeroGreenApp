@@ -752,6 +752,25 @@ document.addEventListener('DOMContentLoaded', () => {
     new Navigation();
     new Gallery();
     new SEOAnimationController();
+    
+    // Handle navigation brand click to return to home
+    const navBrand = document.getElementById('navBrand');
+    if (navBrand) {
+        navBrand.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Scroll to top and reset the app
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            
+            // Reset any active states and hide sections if needed
+            const controlsSection = document.getElementById('controlsSection');
+            const previewSection = document.getElementById('previewSection');
+            if (controlsSection) controlsSection.style.display = 'none';
+            if (previewSection) previewSection.style.display = 'none';
+        });
+    }
 });
 
 // Register service worker for PWA functionality
