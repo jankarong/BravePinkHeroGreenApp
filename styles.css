@@ -627,6 +627,9 @@ body {
     max-height: 500px;
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
+    object-fit: contain;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 /* Loading States */

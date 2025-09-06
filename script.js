@@ -192,21 +192,39 @@ class BravePinkHeroGreenFilter {
         this.elements.originalImage.src = img.src;
         this.elements.originalImage.style.display = 'block';
 
-        // Setup canvas dimensions
+        // Setup canvas dimensions - preserve aspect ratio
         const maxWidth = 800;
         const maxHeight = 600;
-        let { width, height } = img;
+        const originalWidth = img.naturalWidth || img.width;
+        const originalHeight = img.naturalHeight || img.height;
+        
+        // Calculate aspect ratio
+        const aspectRatio = originalWidth / originalHeight;
+        let canvasWidth = originalWidth;
+        let canvasHeight = originalHeight;
 
-        if (width > maxWidth || height > maxHeight) {
-            const ratio = Math.min(maxWidth / width, maxHeight / height);
-            width *= ratio;
-            height *= ratio;
+        // Scale down if needed while maintaining aspect ratio
+        if (originalWidth > maxWidth || originalHeight > maxHeight) {
+            const widthRatio = maxWidth / originalWidth;
+            const heightRatio = maxHeight / originalHeight;
+            const ratio = Math.min(widthRatio, heightRatio);
+            
+            canvasWidth = Math.round(originalWidth * ratio);
+            canvasHeight = Math.round(originalHeight * ratio);
         }
 
-        this.canvas.width = width;
-        this.canvas.height = height;
-        this.canvas.style.width = `${width}px`;
-        this.canvas.style.height = `${height}px`;
+        // Set canvas dimensions
+        this.canvas.width = canvasWidth;
+        this.canvas.height = canvasHeight;
+        this.canvas.style.width = `${canvasWidth}px`;
+        this.canvas.style.height = `${canvasHeight}px`;
+        
+        // Store original dimensions for processing
+        this.originalDimensions = {
+            width: originalWidth,
+            height: originalHeight,
+            aspectRatio: aspectRatio
+        };
     }
 
     showControls() {
@@ -231,7 +249,10 @@ class BravePinkHeroGreenFilter {
     processImage() {
         const { width, height } = this.canvas;
 
-        // Draw original image to canvas
+        // Clear canvas first
+        this.ctx.clearRect(0, 0, width, height);
+        
+        // Draw original image to canvas maintaining aspect ratio
         this.ctx.drawImage(this.currentImage, 0, 0, width, height);
 
         // Get image data
