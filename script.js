@@ -2,8 +2,7 @@ class BravePinkHeroGreenFilter {
     constructor() {
         this.defaultColors = {
             pink: '#f784c5',
-            green: '#1b602f',
-            resistanceBlue: '#000072'
+            green: '#1b602f'
         };
 
         this.currentImage = null;
@@ -11,7 +10,7 @@ class BravePinkHeroGreenFilter {
         this.ctx = null;
 
         this.settings = {
-            intensity: 80,
+            intensity: 100,
             invert: false,
             pinkColor: this.defaultColors.pink,
             greenColor: this.defaultColors.green,
@@ -295,10 +294,6 @@ class BravePinkHeroGreenFilter {
                 this.settings.pinkColor = this.defaultColors.pink;
                 this.settings.greenColor = this.defaultColors.green;
                 break;
-            case 'resistance':
-                this.settings.pinkColor = this.defaultColors.resistanceBlue;
-                this.settings.greenColor = this.defaultColors.green;
-                break;
         }
 
         // Update color pickers
@@ -334,7 +329,7 @@ class BravePinkHeroGreenFilter {
 
         // Reset settings
         this.settings = {
-            intensity: 80,
+            intensity: 100,
             invert: false,
             pinkColor: this.defaultColors.pink,
             greenColor: this.defaultColors.green,
@@ -342,8 +337,8 @@ class BravePinkHeroGreenFilter {
         };
 
         // Reset UI
-        this.elements.intensitySlider.value = 80;
-        this.elements.intensityValue.textContent = '80%';
+        this.elements.intensitySlider.value = 100;
+        this.elements.intensityValue.textContent = '100%';
         this.elements.invertColors.checked = false;
         this.elements.pinkColor.value = this.defaultColors.pink;
         this.elements.greenColor.value = this.defaultColors.green;
@@ -506,9 +501,69 @@ class ImageProcessor {
     }
 }
 
+// Navigation functionality
+class Navigation {
+    constructor() {
+        this.navToggle = document.getElementById('navToggle');
+        this.navMenu = document.getElementById('navMenu');
+        this.navLinks = document.querySelectorAll('.nav-link');
+        this.init();
+    }
+
+    init() {
+        this.bindEvents();
+    }
+
+    bindEvents() {
+        // Mobile menu toggle
+        this.navToggle.addEventListener('click', () => {
+            this.toggleMobileMenu();
+        });
+
+        // Close mobile menu when clicking on a link
+        this.navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                this.closeMobileMenu();
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!this.navToggle.contains(e.target) && !this.navMenu.contains(e.target)) {
+                this.closeMobileMenu();
+            }
+        });
+
+        // Handle scroll for navbar transparency
+        window.addEventListener('scroll', () => {
+            this.handleNavbarScroll();
+        });
+    }
+
+    toggleMobileMenu() {
+        this.navToggle.classList.toggle('active');
+        this.navMenu.classList.toggle('active');
+    }
+
+    closeMobileMenu() {
+        this.navToggle.classList.remove('active');
+        this.navMenu.classList.remove('active');
+    }
+
+    handleNavbarScroll() {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 100) {
+            navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+        } else {
+            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+        }
+    }
+}
+
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new BravePinkHeroGreenFilter();
+    new Navigation();
 });
 
 // Register service worker for PWA functionality
