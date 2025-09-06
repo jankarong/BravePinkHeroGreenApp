@@ -1214,6 +1214,7 @@ body {
     counter-reset: step-counter;
     border: 1px solid rgba(27, 96, 47, 0.15);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    list-style: none;
 }
 
 .tutorial-steps li {
@@ -1465,6 +1466,42 @@ body {
     }
 }
 
+/* Color explanation cards styling */
+.color-explanation-grid {
+    margin: var(--space-12) 0;
+}
+
+.color-card {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Desktop optimization for color cards */
+@media (min-width: 768px) {
+    .color-explanation-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-8);
+        /* 移除max-width，让它占满容器宽度 */
+    }
+    
+    .color-card {
+        padding: var(--space-10);
+        min-height: 200px;
+    }
+    
+    .color-card h3 {
+        font-size: 1.4rem;
+        margin-bottom: var(--space-4);
+    }
+    
+    .color-card p {
+        font-size: 1.1rem;
+        line-height: 1.7;
+    }
+}
+
 /* Large screen optimization */
 @media (min-width: 1200px) {
     .seo-content {
@@ -1475,6 +1512,26 @@ body {
     .content-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: var(--space-10);
+    }
+    
+    .color-explanation-grid {
+        gap: var(--space-10);
+        /* 移除max-width，让它占满容器宽度 */
+    }
+    
+    .color-card {
+        padding: var(--space-12);
+        min-height: 200px;
+    }
+    
+    .color-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: var(--space-5);
+    }
+    
+    .color-card p {
+        font-size: 1.125rem;
+        line-height: 1.8;
     }
     
     .faq-grid {
