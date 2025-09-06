@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Icon Generator</title>
+</head>
+<body>
+    <canvas id="canvas" width="512" height="512" style="border: 1px solid #ccc;"></canvas>
+    <script>
+        // Generate app icons programmatically
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function generateIcon(size = 512) {
+            canvas.width = size;
+            canvas.height = size;
+            
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#f784c5'); // Brave Pink
+            gradient.addColorStop(1, '#1b602f'); // Hero Green
+            
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Add circular overlay
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const radius = size * 0.35;
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.fill();
+            
+            // Add camera icon representation
+            const iconSize = size * 0.3;
+            const iconX = centerX - iconSize / 2;
+            const iconY = centerY - iconSize / 2;
+            
+            // Camera body
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fillRect(iconX, iconY + iconSize * 0.2, iconSize, iconSize * 0.6);
+            
+            // Camera lens
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, iconSize * 0.25, 0, 2 * Math.PI);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, iconSize * 0.15, 0, 2 * Math.PI);
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.fill();
+            
+            return canvas.toDataURL('image/png');
+        }
+        
+        // Generate icons and log them
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        
+        sizes.forEach(size => {
+            const dataUrl = generateIcon(size);
+            console.log(`Icon ${size}x${size} generated`);
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.download = `icon-${size}.png`;
+            link.href = dataUrl;
+            link.textContent = `Download ${size}x${size} icon`;
+            link.style.display = 'block';
+            link.style.margin = '5px 0';
+            document.body.appendChild(link);
+        });
+    </script>
+</body>
+</html>
