@@ -259,12 +259,18 @@ class BravePinkHeroGreenFilter {
                 targetColor = luminance > 0.5 ? pinkRGB : greenRGB;
             }
 
-            // Apply intensity
+            // Apply intensity - blend between original and pure target color
             const intensity = this.settings.intensity / 100;
 
-            data[i] = r + (targetColor.r - r) * intensity;
-            data[i + 1] = g + (targetColor.g - g) * intensity;
-            data[i + 2] = b + (targetColor.b - b) * intensity;
+            if (intensity === 0) {
+                // Keep original colors when intensity is 0
+                continue;
+            } else {
+                // Apply pure target colors, intensity controls opacity/blend
+                data[i] = Math.round(r * (1 - intensity) + targetColor.r * intensity);
+                data[i + 1] = Math.round(g * (1 - intensity) + targetColor.g * intensity);
+                data[i + 2] = Math.round(b * (1 - intensity) + targetColor.b * intensity);
+            }
         }
 
         // Put modified image data back to canvas
@@ -560,10 +566,171 @@ class Navigation {
     }
 }
 
+// Gallery functionality
+class Gallery {
+    constructor() {
+        this.currentSlide = 0;
+        this.slides = document.querySelectorAll('.gallery-slide');
+        this.dots = document.querySelectorAll('.dot');
+        this.prevBtn = document.getElementById('galleryPrev');
+        this.nextBtn = document.getElementById('galleryNext');
+        this.autoPlayInterval = null;
+        this.autoPlayDelay = 5000; // 5 seconds
+        this.init();
+    }
+
+    init() {
+        this.bindEvents();
+        this.startAutoPlay();
+    }
+
+    bindEvents() {
+        // Navigation buttons
+        this.prevBtn.addEventListener('click', () => {
+            this.goToSlide(this.currentSlide - 1);
+            this.resetAutoPlay();
+        });
+
+        this.nextBtn.addEventListener('click', () => {
+            this.goToSlide(this.currentSlide + 1);
+            this.resetAutoPlay();
+        });
+
+        // Dots navigation
+        this.dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                this.goToSlide(index);
+                this.resetAutoPlay();
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                this.goToSlide(this.currentSlide - 1);
+                this.resetAutoPlay();
+            } else if (e.key === 'ArrowRight') {
+                this.goToSlide(this.currentSlide + 1);
+                this.resetAutoPlay();
+            }
+        });
+
+        // Pause autoplay on hover
+        const galleryContainer = document.querySelector('.gallery-container');
+        galleryContainer.addEventListener('mouseenter', () => {
+            this.stopAutoPlay();
+        });
+
+        galleryContainer.addEventListener('mouseleave', () => {
+            this.startAutoPlay();
+        });
+    }
+
+    goToSlide(slideIndex) {
+        // Handle wrap-around
+        if (slideIndex >= this.slides.length) {
+            slideIndex = 0;
+        } else if (slideIndex < 0) {
+            slideIndex = this.slides.length - 1;
+        }
+
+        // Remove active classes
+        this.slides[this.currentSlide].classList.remove('active');
+        this.dots[this.currentSlide].classList.remove('active');
+
+        // Add active classes to new slide
+        this.currentSlide = slideIndex;
+        this.slides[this.currentSlide].classList.add('active');
+        this.dots[this.currentSlide].classList.add('active');
+    }
+
+    nextSlide() {
+        this.goToSlide(this.currentSlide + 1);
+    }
+
+    startAutoPlay() {
+        this.stopAutoPlay(); // Clear any existing interval
+        this.autoPlayInterval = setInterval(() => {
+            this.nextSlide();
+        }, this.autoPlayDelay);
+    }
+
+    stopAutoPlay() {
+        if (this.autoPlayInterval) {
+            clearInterval(this.autoPlayInterval);
+            this.autoPlayInterval = null;
+        }
+    }
+
+    resetAutoPlay() {
+        this.stopAutoPlay();
+        this.startAutoPlay();
+    }
+}
+
+// SEO Content Animation Controller
+class SEOAnimationController {
+    constructor() {
+        this.observer = null;
+        this.init();
+    }
+
+    init() {
+        this.createObserver();
+        this.observeElements();
+    }
+
+    createObserver() {
+        const options = {
+            root: null,
+            rootMargin: '0px 0px -50px 0px',
+            threshold: 0.1
+        };
+
+        this.observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Animate content cards with delay
+                    const cards = entry.target.querySelectorAll('.content-card');
+                    cards.forEach((card, index) => {
+                        setTimeout(() => {
+                            card.classList.add('visible');
+                        }, index * 100);
+                    });
+                }
+            });
+        }, options);
+    }
+
+    observeElements() {
+        // Observe all SEO content sections
+        const seoSections = document.querySelectorAll('.seo-content-section');
+        seoSections.forEach(section => {
+            this.observer.observe(section);
+        });
+
+        // Initially hide all content cards
+        const contentCards = document.querySelectorAll('.content-card');
+        contentCards.forEach(card => {
+            card.classList.remove('visible');
+        });
+    }
+
+    destroy() {
+        if (this.observer) {
+            this.observer.disconnect();
+        }
+    }
+}
+
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new BravePinkHeroGreenFilter();
     new Navigation();
+    new Gallery();
+    new SEOAnimationController();
 });
 
 // Register service worker for PWA functionality
