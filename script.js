@@ -771,6 +771,31 @@ document.addEventListener('DOMContentLoaded', () => {
             if (previewSection) previewSection.style.display = 'none';
         });
     }
+    
+    // Debug and fix footer links
+    const footerLinks = document.querySelectorAll('.footer-links a');
+    footerLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            console.log('Footer link clicked:', href);
+            
+            // If it's a privacy-policy.html link, ensure it works
+            if (href === 'privacy-policy.html') {
+                // Allow the default behavior, but add a fallback
+                setTimeout(() => {
+                    // If the page doesn't navigate within 100ms, force navigation
+                    if (window.location.pathname.indexOf('privacy-policy') === -1) {
+                        window.location.href = 'privacy-policy.html';
+                    }
+                }, 100);
+            }
+        });
+        
+        // Add visual feedback on hover to ensure links are interactive
+        link.addEventListener('mouseenter', () => {
+            link.style.cursor = 'pointer';
+        });
+    });
 });
 
 // Register service worker for PWA functionality
