@@ -150,6 +150,9 @@ body {
     color: inherit;
     transition: var(--transition-normal);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .nav-brand-link:hover {
@@ -167,6 +170,20 @@ body {
     color: var(--primary-green);
     font-weight: 700;
     text-shadow: 0 2px 4px rgba(27, 96, 47, 0.3);
+}
+
+/* Navigation Logo */
+.nav-logo {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-normal);
+    flex-shrink: 0;
+}
+
+.nav-brand-link:hover .nav-logo {
+    transform: rotate(-5deg) scale(1.05);
+    box-shadow: var(--shadow-md);
 }
 
 .nav-menu {
@@ -2006,10 +2023,36 @@ body {
     background: linear-gradient(90deg, var(--primary-pink), var(--primary-green));
 }
 
+/* Footer Brand Section */
+.footer-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+    flex-wrap: wrap;
+}
+
+.footer-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+    transition: var(--transition-normal);
+    filter: brightness(1.1);
+    margin-bottom: 12px;
+}
+
+.footer-logo:hover {
+    transform: scale(1.1) rotate(5deg);
+    filter: brightness(1.2);
+    box-shadow: 0 8px 16px rgba(247, 132, 197, 0.3);
+}
+
 .footer p {
     font-family: var(--font-secondary);
-    margin-bottom: var(--space-6);
+    margin: 0;
     font-size: 0.875rem;
+    max-width: 600px;
 }
 
 .footer-links {
