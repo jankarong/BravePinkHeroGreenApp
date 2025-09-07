@@ -2229,6 +2229,28 @@ body {
     filter: brightness(1.1);
 }
 
+.footer-badges {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.footer-badge-link {
+    transition: all 0.3s ease;
+    display: block;
+}
+
+.footer-badge-link:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.footer-badge-link img {
+    height: auto;
+    max-height: 40px;
+}
+
 /* Privacy Policy Styles */
 .privacy-content {
     max-width: 800px;
