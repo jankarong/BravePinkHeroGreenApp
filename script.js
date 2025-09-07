@@ -48,6 +48,20 @@ class BravePinkHeroGreenFilter {
     }
 
     bindEvents() {
+        // CTA Button event
+        const ctaButton = document.getElementById('ctaButton');
+        if (ctaButton) {
+            ctaButton.addEventListener('click', () => {
+                const uploadSection = document.querySelector('.upload-section');
+                if (uploadSection) {
+                    uploadSection.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            });
+        }
+
         // Upload events
         this.elements.uploadArea.addEventListener('click', () => {
             this.elements.fileInput.click();
